@@ -19,8 +19,9 @@ BIN_DEST="/usr/local/sbin/node_exporter"
 function cleanup {
     echo "Cleaning up..."
     cd /
-    rm ${FILE_DEST}
-    rm ${SUMS_DEST}
+    rm -f ${FILE_DEST}
+    rm -f ${SUMS_DEST}
+    rm -rf ${TMPDIR}/node_exporter-${VERSION}.linux-${ARCH}
     rmdir ${TMPDIR}
     if [ $? -ne 0 ]; then
         echo "Failed to delete temp dir ${TMPDIR}."
