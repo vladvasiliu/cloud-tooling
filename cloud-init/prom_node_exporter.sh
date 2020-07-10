@@ -63,7 +63,9 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Validating checksum..."
-sha256sum --check --ignore-missing ${SUMS_DEST}
+# --ignore-missing is not supported by Coreutils 8.22 (as appears in Amazon Linux 2 AMIs)
+# sha256sum --check --ignore-missing ${SUMS_DEST}
+grep `basename ${FILE_DEST}` ${SUMS_DEST} |  sha256sum --check -
 
 if [ $? -ne 0 ]; then
     echo "Checksum verification failed. Bailing out..."
@@ -72,13 +74,13 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Unpacking archive..."
-tar -xf ${FILE_DEST}
+tar -xf ${FILE_DEST} node_exporter-${VERSION}.linux-${ARCH}/node_exporter
 
 echo "Moving binary to ${BIN_DEST}"
 mv ${TMPDIR}/node_exporter-${VERSION}.linux-${ARCH}/node_exporter ${BIN_DEST}
 if [ $? -ne 0 ]; then
     echo "Moving binary failed. Bailing out..."
-    #cleanup
+    cleanup
     exit 1
 fi
 
@@ -98,7 +100,7 @@ EOF
 
 if [ $? -ne 0 ]; then
     echo "Creating unit file failed. Bailing out..."
-    #cleanup
+    cleanup
     exit 1
 fi
 
