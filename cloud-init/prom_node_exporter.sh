@@ -6,7 +6,7 @@
 # Only supports systemd-based distributions
 
 ARCH=${1:-"amd64"}
-VERSION="1.0.1"
+VERSION="1.1.2"
 
 BASE_TEMP_DIR=${XDG_RUNTIME_DIR:-"/var/run"}
 TMPDIR="${BASE_TEMP_DIR}/install_node_exporter"
